@@ -51,7 +51,11 @@ booleanParam(defaultValue: false, description: 'Deploy using downstream images',
 booleanParam(defaultValue: true, description: 'Clean up workspace after build', name: 'CLEAN_WORKSPACE'),
 booleanParam(defaultValue: false, description: 'Persistent cluster builds with fixed hostname', name: 'PERSISTENT'),
 booleanParam(defaultValue: false, description: 'Enable debugging', name: 'DEBUG'),
-booleanParam(defaultValue: true, description: 'EC2 terminate instances after build', name: 'EC2_TERMINATE_INSTANCES')])])
+booleanParam(defaultValue: true, description: 'EC2 terminate instances after build', name: 'EC2_TERMINATE_INSTANCES'),
+booleanParam(defaultValue: false, description: 'Execute applications migration', name: 'MIGRATE'),
+booleanParam(defaultValue: true, description: 'Deploy demo applications', name: 'DEPLOY'),
+booleanParam(defaultValue: false, description: 'Install mig controller UI', name: 'MIG_CONTROLLER_UI')])])
+
 
 // true/false build parameter that defines if we use OLM to deploy mig operator on OCP4
 USE_OLM = params.USE_OLM
@@ -83,6 +87,7 @@ echo "Job URL ${env.JOB_URL}"
 
 node {
     sh "mkdir ${WORKSPACE}-${BUILD_NUMBER}"
+    sh "echo ${WORKSPACE}-${BUILD_NUMBER} > ${JENKINS_HOME}/lastBuild"
     ws("${WORKSPACE}-${BUILD_NUMBER}") {
     try {
         checkout scm
